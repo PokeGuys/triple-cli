@@ -8,7 +8,6 @@
 'use strict';
 
 const countries = require('country-list')();
-const fs = require('fs');
 const inquirer = require('inquirer');
 const urlRegex = require('url-regex');
 const { 
@@ -137,18 +136,9 @@ async function main() {
         let description = await fetchSummary(info.result.name);
         let result = await sendPhoto(photo).then(response => response.json());
         if (result.status_code !== '200') {
-            console.log(result);
-            fs.writeFile('test.txt', photo, 'binary', function (err) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log("The file was saved!");
-                }
-            });
-
             throw new Error('E-serviceHK throw an exception!');
         }
-        let apiResult = await sendNewCity({
+        await sendNewCity({
             country: city.country,
             city: info.result.name,
             meta: {
